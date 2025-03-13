@@ -12,7 +12,11 @@ require('dotenv').config();
 const app = express();
 
 // Enable CORS
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'X-Client-Id', 'X-Client-Secret', 'X-Api-Version']
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

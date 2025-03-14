@@ -1,28 +1,26 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+// vite.config.js
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
-const a = 'https://8fee-117-254-230-212.ngrok-free.app/';
-
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [react()],
   server: {
-    proxy: {
+    proxy: command === 'serve' ? {
       '/upload': {
-        target: a,
+        target: 'https://8fee-117-254-230-212.ngrok-free.app',
         changeOrigin: true,
         secure: false
       },
       '/create-payment': {
-        target: a,
+        target: 'https://8fee-117-254-230-212.ngrok-free.app',
         changeOrigin: true,
         secure: false
       },
       '/verify-payment': {
-        target: a,
+        target: 'https://8fee-117-254-230-212.ngrok-free.app',
         changeOrigin: true,
         secure: false
       }
-    }
+    } : undefined
   }
-})
+}));

@@ -4,8 +4,10 @@ import { load } from '@cashfreepayments/cashfree-js';
 import './App.css';
 import FileUpload from './components/FileUpload';
 
-// Configure axios base URL
-axios.defaults.baseURL = '';
+// Instead of relative paths, use full URL in production
+axios.defaults.baseURL = import.meta.env.PROD 
+  ? 'https://8fee-117-254-230-212.ngrok-free.app/'
+  : '';
 
 function App() {
   const [cashfree, setCashfree] = useState(null);

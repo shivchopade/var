@@ -1,4 +1,3 @@
-// server.js
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import path from 'path';
@@ -6,25 +5,20 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
-const port = process.env.PORT || '0.0.0.0:8080';
+const port = process.env.PORT || 3000;
 
-// Serve static files
-app.use(express.static(path.join(__dirname, 'dist')));
+// Serve static files from React build
+app.use(express.static(path.join(__dirname, 'client', 'dist')));
 
 // Proxy configuration
-const proxyOptions = {
-  target: 'https://8fee-117-254-230-212.ngrok-free.app',
-  changeOrigin: true,
-  secure: false
-};
+const API_URL = 'https://8fee-117-254-230-212.ngrok-free.app';
+app.use('/upload', createProxyMiddleware({ target: API_URL, changeOrigin: true }));
+app.use('/create-payment', createProxyMiddleware({ target: API_URL, changeOrigin: true }));
+app.use('/verify-payment', createProxyMiddleware({ target: API_URL, changeOrigin: true }));
 
-app.use('/upload', createProxyMiddleware(proxyOptions));
-app.use('/create-payment', createProxyMiddleware(proxyOptions));
-app.use('/verify-payment', createProxyMiddleware(proxyOptions));
-
-// Handle SPA routing
+// Handle client-side routing
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
 });
 
 app.listen(port, () => {
